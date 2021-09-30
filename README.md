@@ -1,8 +1,10 @@
-# Symfony Docker
+# La Fourche Backend Developer test
 
-A [Docker](https://www.docker.com/)-based installer and runtime for the [Symfony](https://symfony.com) web framework, with full [HTTP/2](https://symfony.com/doc/current/weblink.html), HTTP/3 and HTTPS support.
+This is a boilerplate for La Fourche Backend Developer test.
+You were sent what to do from here by email.
 
-![CI](https://github.com/dunglas/symfony-docker/workflows/CI/badge.svg)
+This repository is a fork of [Symfony Docker](https://github.com/dunglas/symfony-docker).
+It setups a Symfony in docker containers.
 
 ## Getting Started
 
@@ -10,28 +12,21 @@ A [Docker](https://www.docker.com/)-based installer and runtime for the [Symfony
 2. Run `docker-compose build --pull --no-cache` to build fresh images
 3. Run `docker-compose up` (the logs will be displayed in the current shell)
 4. Open `https://localhost` in your favorite web browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334)
+4. Open `https://localhost:8080` to query database, DSN in .env file
 
-## Features
 
-* Production, development and CI ready
-* Automatic HTTPS (in dev and in prod!)
-* HTTP/2, HTTP/3 and [Preload](https://symfony.com/doc/current/web_link.html) support
-* Built-in [Mercure](https://symfony.com/doc/current/mercure.html) hub
-* [Vulcain](https://vulcain.rocks) support
-* Just 2 services (PHP FPM and Caddy server)
-* Super-readable configuration
+## Setup vendors and database
 
-**Enjoy!**
+```
+# run cli in the php container
+docker-compose exec php /bin/sh
 
-## Docs
+# add vendors
+composer install
 
-1. [Build options](docs/build.md)
-2. [Using Symfony Docker with an existing project](docs/existing-project.md)
-3. [Support for extra services](docs/extra-services.md)
-4. [Deploying in production](docs/production.md)
-5. [Installing Xdebug](docs/xdebug.md)
-6. [Troubleshooting](docs/troubleshooting.md)
+# update the database schema 
+bin/console doctrine:schema:update -f
 
-## Credits
-
-Created by [Kévin Dunglas](https://dunglas.fr), co-maintained by [Maxime Helias](https://twitter.com/maxhelias) and sponsored by [Les-Tilleuls.coop](https://les-tilleuls.coop).
+# to load fixtures data
+bin/console doctrine:fixtures:load
+```

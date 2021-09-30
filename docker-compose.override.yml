@@ -17,3 +17,15 @@ services:
     volumes:
       - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
       - ./public:/srv/app/public:ro
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+###> doctrine/doctrine-bundle ###
+  database:
+    ports:
+      - "5432:5432"
+###< doctrine/doctrine-bundle ###

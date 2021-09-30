@@ -4,11 +4,11 @@
 
 
 # https://docs.docker.com/engine/reference/builder/#understand-how-arg-and-from-interact
-ARG PHP_VERSION=8.0
+ARG PHP_VERSION=7.4
 ARG CADDY_VERSION=2
 
 # "php" stage
-FROM php:${PHP_VERSION}-fpm-alpine AS symfony_php
+FROM php:${PHP_VERSION}-fpm-alpine3.13 AS symfony_php
 
 # persistent / runtime deps
 RUN apk add --no-cache \
@@ -98,6 +98,12 @@ RUN composer create-project "${SKELETON} ${SYMFONY_VERSION}" . --stability=$STAB
 	composer clear-cache
 
 ###> recipes ###
+###> doctrine/doctrine-bundle ###
+RUN apk add --no-cache --virtual .pgsql-deps postgresql-dev; \
+	docker-php-ext-install -j$(nproc) pdo_pgsql; \
+	apk add --no-cache --virtual .pgsql-rundeps so:libpq.so.5; \
+	apk del .pgsql-deps
+###< doctrine/doctrine-bundle ###
 ###< recipes ###
 
 COPY . .

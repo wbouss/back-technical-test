@@ -54,9 +54,15 @@ class Order
      */
     private $lines;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Tag", inversedBy="orders")
+     */
+    private $tags;
+
     public function __construct()
     {
         $this->lines = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -135,5 +141,25 @@ class Order
     public function getLines(): ArrayCollection
     {
         return $this->lines;
+    }
+
+    /**
+     * @return Collection|Tag[]
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+    public function addTag(Tag $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+        }
+        return $this;
+    }
+    public function removeTag(Tag $tag): self
+    {
+        $this->tags->removeElement($tag);
+        return $this;
     }
 }
